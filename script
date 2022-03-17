@@ -1,0 +1,15 @@
+import model VPrime_NLO
+
+generate p p > e+ ve
+add process p p > e- ve~
+
+output KL1000_10_1
+launch KL1000_10_1
+
+set kl 1
+set mwp 1000
+set wwp auto
+
+set nevents 20000
+set ptl 10
+set ptlmax 100
