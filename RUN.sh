@@ -27,7 +27,7 @@ export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 echo "\$VO_CMS_SW_DIR \$SCRAM_ARCH"
 source \$VO_CMS_SW_DIR/cmsset_default.sh
 export SSL_CERT_DIR='/etc/grid-security/certificates'
-cd /home/cykim/CMSSW_10_2_23/src ; echo "cmsenv"   #자기 파일 경로에 맞게 수정
+cd /home/cykim/CMSSW_10_2_23/src ; echo "cmsenv"  
 cd -
 
 #script 파일
@@ -68,18 +68,18 @@ EOF
 chmod 777 card_${1}_${2}_${3}.sh
 
 
-
+# submit 파일
 cat << EOF > job_${1}_${2}_${3}.jdl
 
-executable = card_${1}_${2}_${3}.sh # 파일 경로 수정
+executable = card_${1}_${2}_${3}.sh
 universe = vanilla
 error = err/error_\$(Cluster).log
 output = output/output_\$(Cluster).log
 log = /dev/null
 should_transfer_files = YES
-transfer_input_files = card_${1}_${2}_${3}.sh  # 파일 경로 수정
+transfer_input_files = card_${1}_${2}_${3}.sh 
 transfer_output_files = condorMadOut
-requirements = (machine == "node01") # 사용할 노드 선택
+requirements = (machine == "node01")
 when_to_transfer_output = ON_EXIT
 
 queue
