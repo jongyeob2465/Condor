@@ -1,6 +1,6 @@
 #!/bin/bash
 
-madgraph5_path="/home/cykim/Madgraph5/MG5_aMC_v2_6_7"
+madgraph5_path="매드그래프 경로"
 
 # argv1 = Wp mass
 # argv2 = coupling constant(kL)
@@ -19,7 +19,7 @@ ptlmax=$6
 coupling=$((${2}/10))
 
 
-cat << EOF > card_${1}_${2}_${3}.sh
+cat << EOF > card_${1}_${2}_${3}.sh  
 #!/bin/bash
 
 export SCRAM_ARCH=slc6_amd64_gcc700
@@ -27,10 +27,10 @@ export VO_CMS_SW_DIR=/cvmfs/cms.cern.ch
 echo "\$VO_CMS_SW_DIR \$SCRAM_ARCH"
 source \$VO_CMS_SW_DIR/cmsset_default.sh
 export SSL_CERT_DIR='/etc/grid-security/certificates'
-cd /home/cykim/CMSSW_10_2_23/src ; echo "cmsenv"
+cd /home/cykim/CMSSW_10_2_23/src ; echo "cmsenv"   #자기 파일 경로에 맞게 수정
 cd -
 
-
+#script 파일
 cat << EOF > script_${1}_${2}_${3}
 import model VPrime_NLO
 
@@ -71,23 +71,20 @@ chmod 777 card_${1}_${2}_${3}.sh
 
 cat << EOF > job_${1}_${2}_${3}.jdl
 
-executable = /home/cykim/bcondor/card/card_${1}_${2}_${3}.sh
+executable = card_${1}_${2}_${3}.sh # 파일 경로 수정
 universe = vanilla
 error = err/error_\$(Cluster).log
 output = output/output_\$(Cluster).log
 log = /dev/null
 should_transfer_files = YES
-transfer_input_files = /home/cykim/bcondor/card/card_${1}_${2}_${3}.sh
+transfer_input_files = card_${1}_${2}_${3}.sh  # 파일 경로 수정
 transfer_output_files = condorMadOut
-requirements = (machine == "node01")
+requirements = (machine == "node01") # 사용할 노드 선택
 when_to_transfer_output = ON_EXIT
 
 queue
 
 EOF
-
-mv card_${1}_${2}_${3}.sh card/
-mv job_${1}_${2}_${3}.jdl job/
 
 condor_submit job/job_${1}_${2}_${3}.jdl
 
